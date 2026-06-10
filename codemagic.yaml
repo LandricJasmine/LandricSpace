@@ -1,0 +1,196 @@
+workflows:
+  # iOS Build using EAS Build
+  ios-build:
+    name: iOS Build
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    working_directory: client
+    environment:
+      groups:
+        - eas_credentials # <-- Add EAS_BUILD_CREDENTIALS and APPLE_ID env vars in Codemagic UI
+      vars:
+        XCODE_WORKSPACE: "ios/LandricSpace.xcworkspace"
+        XCODE_SCHEME: "LandricSpace"
+        BUNDLE_ID: "com.landricos.app"
+        APP_STORE_APP_ID: 1234567890 # <-- Replace with your App Store Connect App ID
+      node: 20
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+        - tag
+        - pull_request
+      branch_patterns:
+        - pattern: "main"
+          include: true
+        - pattern: "develop"
+          include: true
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+        - $HOME/.npm
+        - node_modules/.cache
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm install
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios && pod install
+      - name: Set up keychain for code signing
+        script: |
+          keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+      - name: Add certificates to keychain
+        script: |
+          keychain add-certificates
+      - name: Set up code signing settings
+        script: |
+          xcode-project use-profiles
+      - name: Build iOS IPA
+        script: |
+          xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      email:
+        recipients:
+          - user@example.com # <-- Replace with your email
+        notify:
+          success: true
+          failure: true
+
+  # Android Build using EAS Build
+  android-build:
+    name: Android Build
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    working_directory: client
+    environment:
+      groups:
+        - eas_credentials # <-- Add EAS_BUILD_CREDENTIALS and ANDROID_KEYSTORE env vars in Codemagic UI
+      vars:
+        PACKAGE_NAME: "com.landricos.app"
+        GOOGLE_PLAY_TRACK: "internal"
+      node: 20
+      java: 17
+    triggering:
+      events:
+        - push
+        - tag
+        - pull_request
+      branch_patterns:
+        - pattern: "main"
+          include: true
+        - pattern: "develop"
+          include: true
+    cache:
+      cache_paths:
+        - $HOME/.gradle/caches
+        - $HOME/.npm
+        - node_modules/.cache
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm install
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Build Android AAB
+        script: |
+          eas build --platform android --local --profile production
+    artifacts:
+      - android/app/build/outputs/**/*.aab
+      - android/app/build/outputs/**/mapping.txt
+    publishing:
+      email:
+        recipients:
+          - user@example.com # <-- Replace with your email
+        notify:
+          success: true
+          failure: true
+
+  # EAS Update workflow for OTA updates
+  eas-update:
+    name: EAS Update
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    working_directory: client
+    environment:
+      groups:
+        - eas_credentials # <-- Add EAS_BUILD_CREDENTIALS env var in Codemagic UI
+      vars:
+        EAS_PROJECT_ID: "dae00179-5e32-439d-85da-5195d1596052"
+      node: 20
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: "main"
+          include: true
+    scripts:
+      - name: Install EAS CLI
+        script: |
+          npm install -g eas-cli
+      - name: Login to EAS
+        script: |
+          eas login
+      - name: Create EAS Update
+        script: |
+          eas update --branch main --message "$(git log -1 --pretty=%B)"
+    publishing:
+      email:
+        recipients:
+          - user@example.com # <-- Replace with your email
+        notify:
+          success: true
+          failure: true
+
+  # Expo Development Build
+  expo-dev-build:
+    name: Expo Development Build
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    working_directory: client
+    environment:
+      groups:
+        - eas_credentials
+      vars:
+        EAS_PROJECT_ID: "dae00179-5e32-439d-85da-5195d1596052"
+        BUNDLE_ID: "com.landricos.app"
+        APP_STORE_APP_ID: 1234567890 # <-- Replace with your App Store Connect App ID
+      node: 20
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: "develop"
+          include: true
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm install
+      - name: Install CocoaPods
+        script: |
+          cd ios && pod install
+      - name: Build iOS Development
+        script: |
+          eas build --platform ios --profile development --local
+    artifacts:
+      - build/ios/**/*.ipa
+      - android/app/build/outputs/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - user@example.com # <-- Replace with your email
+        notify:
+          success: true
+          failure: true
