@@ -1,0 +1,518 @@
+@import 'tailwindcss';
+@import 'uniwind';
+@import './heroui/styles';
+
+@theme {
+  /* Primitive Colors (Do not change between light and dark) */
+  --white: oklch(100% 0 0);
+  --black: oklch(0% 0 0);
+  --snow: oklch(0.9911 0 0);
+  --eclipse: oklch(0.2103 0.0059 285.89);
+
+  /* Border */
+  --border-width: 1px;
+  --field-border-width: 0px;
+
+  /* Base radius */
+  --radius: 0.5rem;
+  --field-radius: calc(var(--radius) * 1.5);
+
+  /* Opacity */
+  --opacity-disabled: 0.5;
+}
+
+@layer theme {
+  :root {
+    @variant light {
+      /* Base Colors — LandricOS 轻奢风（暖米色 + 深胡桃 + 香槟金） */
+      --background: #F4ECDD;
+      --foreground: #2A1F12;
+
+      /* Surface */
+      --surface: #FAF5E8;
+      --surface-foreground: #2A1F12;
+
+      /* Overlay */
+      --overlay: #FAF5E8;
+      --overlay-foreground: #2A1F12;
+
+      --muted: #8A7560;
+
+      --default: #EFE4CC;
+      --default-foreground: #2A1F12;
+
+      --accent: #B89460;
+      --accent-foreground: #FAF5E8;
+
+      /* Form Fields */
+      --field-background: #FAF5E8;
+      --field-foreground: #2A1F12;
+      --field-placeholder: #A89478;
+      --field-border: transparent;
+
+      /* Status Colors */
+      --success: #6B8E4E;
+      --success-foreground: #FAF5E8;
+
+      --warning: #C9A876;
+      --warning-foreground: #2A1F12;
+
+      --danger: #8B4513;
+      --danger-foreground: #FAF5E8;
+
+      /* Component Colors */
+      --segment: #EFE4CC;
+      --segment-foreground: #2A1F12;
+
+      /* Misc Colors */
+      --border: #D4C4A8;
+      --separator: #B89460;
+      --focus: #B89460;
+      --link: #B89460;
+
+      /* Shadows */
+      --surface-shadow:
+        0 2px 4px 0 rgba(42, 31, 18, 0.04), 0 1px 2px 0 rgba(42, 31, 18, 0.06),
+        0 0 1px 0 rgba(42, 31, 18, 0.06);
+      --overlay-shadow:
+        0 2px 8px 0 rgba(42, 31, 18, 0.04), 0 -6px 12px 0 rgba(42, 31, 18, 0.02),
+        0 14px 28px 0 rgba(42, 31, 18, 0.08);
+      --field-shadow:
+        0 2px 4px 0 rgba(42, 31, 18, 0.04);
+      color-scheme: light;
+    }
+  }
+
+  :root {
+    @variant dark {
+      /* Base Colors — LandricOS 轻奢风（深胡桃 + 香槟金 + 米白） */
+      --background: #2A1F12;
+      --foreground: #F0E6D2;
+
+      /* Surface */
+      --surface: #3A2E1F;
+      --surface-foreground: #F0E6D2;
+
+      /* Overlay */
+      --overlay: #3A2E1F;
+      --overlay-foreground: #F0E6D2;
+
+      --muted: #A89478;
+
+      --default: #4A3C2A;
+      --default-foreground: #F0E6D2;
+
+      --accent: #C9A876;
+      --accent-foreground: #2A1F12;
+
+      /* Form Fields */
+      --field-background: #3A2E1F;
+      --field-foreground: #F0E6D2;
+      --field-placeholder: #8A7560;
+      --field-border: transparent;
+
+      /* Status Colors */
+      --success: #8FAD6B;
+      --success-foreground: #2A1F12;
+
+      --warning: #C9A876;
+      --warning-foreground: #2A1F12;
+
+      --danger: #B8674A;
+      --danger-foreground: #F0E6D2;
+
+      /* Component Colors */
+      --segment: #4A3C2A;
+      --segment-foreground: #F0E6D2;
+
+      /* Misc Colors */
+      --border: #4A3C2A;
+      --separator: #6B5740;
+      --focus: #C9A876;
+      --link: #C9A876;
+
+      /* Shadows */
+      --surface-shadow:
+        0 2px 4px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.4),
+        0 0 1px 0 rgba(201, 168, 118, 0.1);
+      --overlay-shadow:
+        0 2px 8px 0 rgba(0, 0, 0, 0.4), 0 -6px 12px 0 rgba(0, 0, 0, 0.2),
+        0 14px 28px 0 rgba(0, 0, 0, 0.5);
+      --field-shadow:
+        0 2px 4px 0 rgba(0, 0, 0, 0.3);
+      color-scheme: dark;
+    }
+  }
+}
+
+@theme inline static {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-surface-hover: color-mix(in oklab, var(--surface) 92%, var(--surface-foreground) 8%);
+
+  --color-overlay: var(--overlay);
+  --color-overlay-foreground: var(--overlay-foreground);
+
+  --color-muted: var(--muted);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-segment: var(--segment);
+  --color-segment-foreground: var(--segment-foreground);
+
+  --color-border: var(--border);
+  --color-separator: var(--separator);
+  --color-focus: var(--focus);
+  --color-link: var(--link);
+
+  --color-default: var(--default);
+  --color-default-foreground: var(--default-foreground);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+
+  --color-field: var(--field-background, var(--default));
+  --color-field-foreground: var(--field-foreground, var(--foreground));
+  --color-field-placeholder: var(--field-placeholder, var(--muted));
+  --color-field-border: var(--field-border, var(--border));
+
+  --color-divider: var(--border);
+  --color-default-50: color-mix(in oklab, var(--default) 50%, transparent);
+  --color-default-100: var(--default);
+  --color-default-200: color-mix(in oklab, var(--default) 90%, var(--default-foreground) 10%);
+  --color-default-300: color-mix(in oklab, var(--default) 80%, var(--default-foreground) 20%);
+  --color-default-400: color-mix(in oklab, var(--default) 60%, var(--default-foreground) 40%);
+  --color-default-500: color-mix(in oklab, var(--default) 50%, var(--default-foreground) 50%);
+  --color-default-600: color-mix(in oklab, var(--default) 40%, var(--default-foreground) 60%);
+  --color-default-700: color-mix(in oklab, var(--default) 30%, var(--default-foreground) 70%);
+  --color-default-800: color-mix(in oklab, var(--default) 20%, var(--default-foreground) 80%);
+  --color-default-900: color-mix(in oklab, var(--default) 10%, var(--default-foreground) 90%);
+
+  --color-background-secondary: color-mix(in oklab, var(--background) 96%, var(--foreground) 4%);
+  --color-background-tertiary: color-mix(in oklab, var(--background) 92%, var(--foreground) 8%);
+  --color-background-inverse: var(--foreground);
+
+  --color-default-hover: color-mix(in oklab, var(--default) 96%, var(--default-foreground) 4%);
+  --color-accent-hover: color-mix(in oklab, var(--accent) 90%, var(--accent-foreground) 10%);
+  --color-success-hover: color-mix(in oklab, var(--success) 90%, var(--success-foreground) 10%);
+  --color-warning-hover: color-mix(in oklab, var(--warning) 90%, var(--warning-foreground) 10%);
+  --color-danger-hover: color-mix(in oklab, var(--danger) 90%, var(--danger-foreground) 10%);
+
+  --color-field-hover: color-mix(in oklab, var(--field-background, var(--default)) 90%, var(--field-foreground) 2%);
+  --color-field-focus: var(--field-background, var(--default));
+  --color-field-border-hover: color-mix(in oklab, var(--field-border, var(--border)) 88%, var(--field-foreground) 10%);
+  --color-field-border-focus: color-mix(in oklab, var(--field-border, var(--border)) 74%, var(--field-foreground) 22%);
+
+  --color-accent-soft: color-mix(in oklab, var(--accent) 15%, transparent);
+  --color-accent-soft-foreground: var(--accent);
+  --color-accent-soft-hover: color-mix(in oklab, var(--accent) 20%, transparent);
+
+  --color-danger-soft: color-mix(in oklab, var(--danger) 15%, transparent);
+  --color-danger-soft-foreground: var(--danger);
+  --color-danger-soft-hover: color-mix(in oklab, var(--danger) 20%, transparent);
+
+  --color-warning-soft: color-mix(in oklab, var(--warning) 15%, transparent);
+  --color-warning-soft-foreground: var(--warning);
+  --color-warning-soft-hover: color-mix(in oklab, var(--warning) 20%, transparent);
+
+  --color-success-soft: color-mix(in oklab, var(--success) 15%, transparent);
+  --color-success-soft-foreground: var(--success);
+  --color-success-soft-hover: color-mix(in oklab, var(--success) 20%, transparent);
+
+  /* radius */
+  --radius-radius: var(--radius);
+  --radius-field: var(--field-radius);
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    line-height: inherit;
+    font-family:
+      'Cormorant Garamond', 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    line-height: inherit;
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+
+  abbr:where([title]) {
+    text-decoration: underline dotted;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  b,
+  strong {
+    font-weight: bolder;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 1em;
+  }
+
+  small {
+    font-size: 80%;
+  }
+
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  sub {
+    bottom: -0.25em;
+  }
+
+  sup {
+    top: -0.5em;
+  }
+
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-family: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+  }
+
+  button,
+  select {
+    text-transform: none;
+  }
+
+  button,
+  [type='button'],
+  [type='reset'],
+  [type='submit'] {
+    -webkit-appearance: button;
+    background-color: transparent;
+    background-image: none;
+  }
+
+  :-moz-focusring {
+    outline: auto;
+  }
+
+  progress {
+    vertical-align: baseline;
+  }
+
+  ::-webkit-inner-spin-button,
+  ::-webkit-outer-spin-button {
+    height: auto;
+  }
+
+  [type='search'] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+  }
+
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
+  }
+
+  summary {
+    display: list-item;
+  }
+
+  blockquote,
+  dl,
+  dd,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  hr,
+  figure,
+  p,
+  pre {
+    margin: 0;
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+  }
+
+  legend {
+    padding: 0;
+  }
+
+  ol,
+  ul,
+  menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  dialog {
+    padding: 0;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  ::placeholder {
+    opacity: 1;
+    color: var(--field-placeholder);
+  }
+
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+
+  :disabled {
+    cursor: default;
+  }
+
+  img,
+  svg,
+  video,
+  canvas,
+  audio,
+  iframe,
+  embed,
+  object {
+    display: block;
+    vertical-align: middle;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  [hidden] {
+    display: none;
+  }
+
+  [data-popper-arrow] {
+    visibility: hidden;
+  }
+
+  [data-floating] {
+    visibility: hidden;
+  }
+}
+
+@layer components {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--muted) 30%, transparent);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--muted) 50%, transparent);
+  }
+}
+
+/* === Material 3 semantic alias → LandricOS token === */
+@theme inline static {
+  /* Color mappings (Material 3 names → our tokens) */
+  --color-on-primary: var(--color-accent-foreground);
+  --color-on-surface: var(--color-foreground);
+  --color-on-surface-variant: var(--color-muted);
+  --color-on-background: var(--color-foreground);
+  --color-on-default: var(--color-default-foreground);
+  --color-on-success: var(--color-success-foreground);
+  --color-on-warning: var(--color-warning-foreground);
+  --color-on-danger: var(--color-danger-foreground);
+
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: var(--color-accent-foreground);
+
+  --color-secondary: var(--color-muted);
+  --color-secondary-foreground: var(--color-foreground);
+
+  --color-surface-container-lowest: var(--color-surface);
+  --color-surface-container-low: var(--color-surface);
+  --color-surface-container: var(--color-default);
+  --color-surface-container-high: var(--color-default);
+  --color-surface-container-highest: var(--color-default);
+  --color-surface-variant: var(--color-default);
+  --color-on-surface-variant: var(--color-muted);
+
+  --color-background: var(--background);
+}
